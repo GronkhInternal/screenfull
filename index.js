@@ -17,7 +17,14 @@ const methodMap = [
 		'webkitFullscreenEnabled',
 		'webkitfullscreenchange',
 		'webkitfullscreenerror',
-
+	],
+	[
+		'webkitEnterFullscreen', // iOS safari
+		'webkitExitFullscreen',
+		'webkitFullscreenElement',
+		'webkitFullscreenEnabled',
+		'webkitfullscreenchange',
+		'webkitfullscreenerror',
 	],
 	// Old WebKit
 	[
@@ -27,7 +34,6 @@ const methodMap = [
 		'webkitCancelFullScreen',
 		'webkitfullscreenchange',
 		'webkitfullscreenerror',
-
 	],
 	[
 		'mozRequestFullScreen',

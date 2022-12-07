@@ -18,14 +18,6 @@ const methodMap = [
 		'webkitfullscreenchange',
 		'webkitfullscreenerror',
 	],
-	[
-		'webkitEnterFullscreen', // iOS safari
-		'webkitExitFullscreen',
-		'webkitFullscreenElement',
-		'webkitFullscreenEnabled',
-		'webkitfullscreenchange',
-		'webkitfullscreenerror',
-	],
 	// Old WebKit
 	[
 		'webkitRequestFullScreen',
@@ -83,7 +75,16 @@ const eventNameMap = {
 // eslint-disable-next-line import/no-mutable-exports
 let screenfull = {
 	// eslint-disable-next-line default-param-last
-	request(element = document.documentElement, options) {
+	request(element = document.documentElement, options, iosCheck = false) {
+		if (element['webkitSupportsFullscreen'] && iosCheck) {
+			nativeAPI.requestFullscreen = 'webkitEnterFullscreen';
+			nativeAPI.exitFullscreen = 'webkitExitFullscreen';
+			nativeAPI.fullscreenElement = 'webkitDisplayingFullscreen';
+			nativeAPI.fullscreenEnabled = 'webkitSupportsFullscreen';
+			nativeAPI.fullscreenchange = 'webkitfullscreenchange';
+			nativeAPI.fullscreenerror = 'webkitfullscreenerror';
+		}
+
 		return new Promise((resolve, reject) => {
 			const onFullScreenEntered = () => {
 				screenfull.off('change', onFullScreenEntered);
@@ -120,8 +121,8 @@ let screenfull = {
 			}
 		});
 	},
-	toggle(element, options) {
-		return screenfull.isFullscreen ? screenfull.exit() : screenfull.request(element, options);
+	toggle(element, options, iosCheck = false) {
+		return screenfull.isFullscreen ? screenfull.exit() : screenfull.request(element, options, iosCheck);
 	},
 	onchange(callback) {
 		screenfull.on('change', callback);

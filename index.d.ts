@@ -94,7 +94,7 @@ declare const screenfull: {
 	});
 	```
 	*/
-	request(element?: Element, options?: FullscreenOptions): Promise<void>;
+	request(element?: Element, options?: FullscreenOptions, iosCheck?: boolean): Promise<void>;
 
 	/**
 	Brings you out of fullscreen.
@@ -123,7 +123,7 @@ declare const screenfull: {
 	});
 	```
 	*/
-	toggle(element?: Element, options?: FullscreenOptions): Promise<void>;
+	toggle(element?: Element, options?: FullscreenOptions, iosCheck?: boolean): Promise<void>;
 
 	/**
 	Add a listener for when the browser switches in and out of fullscreen or when there is an error.

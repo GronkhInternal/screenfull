@@ -69,7 +69,7 @@ const nativeAPI = (() => {
 	for (const methodList of methodMap) {
 		const exitFullscreenMethod = methodList?.[1];
 		const forceAPI = 6 in methodList && methodList?.[6]();
-		if (exitFullscreenMethod in document || forceAPI) {
+		if ((exitFullscreenMethod in document && document[exitFullscreenMethod]) || forceAPI) {
 			for (const [index, method] of methodList.entries()) {
 				returnValue[unprefixedMethods[index]] = method;
 			}

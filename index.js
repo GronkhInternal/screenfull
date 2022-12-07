@@ -51,7 +51,10 @@ const methodMap = [
 		'webkitFullscreenEnabled',
 		'webkitfullscreenchange',
 		'webkitfullscreenerror',
-		() => /iPad|iPhone|iPod/.test(navigator.platform)
+		() => {
+			const video = document.createElement('video');
+			return 'webkitEnterFullscreen' in video && 'webkitExitFullscreen' in video
+		}
 	],
 ];
 

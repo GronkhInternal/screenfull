@@ -51,7 +51,7 @@ const methodMap = [
 		'webkitFullscreenEnabled',
 		'webkitfullscreenchange',
 		'webkitfullscreenerror',
-    () => /iPad|iPhone|iPod/.test(navigator.platform)
+		() => /iPad|iPhone|iPod/.test(navigator.platform)
 	],
 ];
 
@@ -65,7 +65,7 @@ const nativeAPI = (() => {
 
 	for (const methodList of methodMap) {
 		const exitFullscreenMethod = methodList?.[1];
-    const forceAPI = 6 in methodList && methodList?.[6]()
+		const forceAPI = 6 in methodList && methodList?.[6]()
 		if (exitFullscreenMethod in document || forceAPI) {
 			for (const [index, method] of methodList.entries()) {
 				returnValue[unprefixedMethods[index]] = method;

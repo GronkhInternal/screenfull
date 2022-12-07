@@ -43,6 +43,16 @@ const methodMap = [
 		'MSFullscreenChange',
 		'MSFullscreenError',
 	],
+	// Dirty workaround for iOS
+	[
+		'webkitEnterFullscreen',
+		'webkitExitFullscreen',
+		'webkitFullscreenElement',
+		'webkitFullscreenEnabled',
+		'webkitfullscreenchange',
+		'webkitfullscreenerror',
+    () => /iPad|iPhone|iPod/.test(navigator.platform)
+	],
 ];
 
 const nativeAPI = (() => {
@@ -55,7 +65,8 @@ const nativeAPI = (() => {
 
 	for (const methodList of methodMap) {
 		const exitFullscreenMethod = methodList?.[1];
-		if (exitFullscreenMethod in document) {
+    const forceAPI = 6 in methodList && methodList?.[6]()
+		if (exitFullscreenMethod in document || forceAPI) {
 			for (const [index, method] of methodList.entries()) {
 				returnValue[unprefixedMethods[index]] = method;
 			}
@@ -75,16 +86,7 @@ const eventNameMap = {
 // eslint-disable-next-line import/no-mutable-exports
 let screenfull = {
 	// eslint-disable-next-line default-param-last
-	request(element = document.documentElement, options, iosCheck = false) {
-		if (element['webkitSupportsFullscreen'] && iosCheck) {
-			nativeAPI.requestFullscreen = 'webkitEnterFullscreen';
-			nativeAPI.exitFullscreen = 'webkitExitFullscreen';
-			nativeAPI.fullscreenElement = 'webkitDisplayingFullscreen';
-			nativeAPI.fullscreenEnabled = 'webkitSupportsFullscreen';
-			nativeAPI.fullscreenchange = 'webkitfullscreenchange';
-			nativeAPI.fullscreenerror = 'webkitfullscreenerror';
-		}
-
+	request(element = document.documentElement, options) {
 		return new Promise((resolve, reject) => {
 			const onFullScreenEntered = () => {
 				screenfull.off('change', onFullScreenEntered);
@@ -121,8 +123,8 @@ let screenfull = {
 			}
 		});
 	},
-	toggle(element, options, iosCheck = false) {
-		return screenfull.isFullscreen ? screenfull.exit() : screenfull.request(element, options, iosCheck);
+	toggle(element, options,) {
+		return screenfull.isFullscreen ? screenfull.exit() : screenfull.request(element, options);
 	},
 	onchange(callback) {
 		screenfull.on('change', callback);

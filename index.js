@@ -68,7 +68,7 @@ const nativeAPI = (() => {
 
 	for (const methodList of methodMap) {
 		const exitFullscreenMethod = methodList?.[1];
-		const forceAPI = 6 in methodList && methodList?.[6]()
+		const forceAPI = 6 in methodList && methodList?.[6]();
 		if (exitFullscreenMethod in document || forceAPI) {
 			for (const [index, method] of methodList.entries()) {
 				returnValue[unprefixedMethods[index]] = method;
@@ -126,7 +126,7 @@ let screenfull = {
 			}
 		});
 	},
-	toggle(element, options,) {
+	toggle(element, options) {
 		return screenfull.isFullscreen ? screenfull.exit() : screenfull.request(element, options);
 	},
 	onchange(callback) {
